@@ -14,7 +14,7 @@ wp-content/*
 wp-content/themes/*
 
 # ignore index.php in plugins folder
-wp-content/plugins/index.php
+wp-content/plugins/*
 
 # ignore all files starting with . or ~
 .*
