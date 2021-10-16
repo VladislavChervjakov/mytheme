@@ -9,9 +9,12 @@
 namespace Inc;
 
 
-class Admin{
+class Admin {
 
-   public function __construct() {
+    private static $instance = null;
+
+
+   private function __construct() {
      add_action( 'admin_menu', [$this, 'mytheme_add_admin_page'] );
    }
 
@@ -33,6 +36,7 @@ class Admin{
         // register custom settings
         register_setting( 'mytheme_settings_group', 'first_name' );
         register_setting( 'mytheme_settings_group', 'last_name' );
+        register_setting( 'mytheme_settings_group', 'user_description' );
         register_setting( 'mytheme_settings_group', 'twitter_handler', [ $this, 'mytheme_sanitize_twitter_handler' ] );
         register_setting( 'mytheme_settings_group', 'facebook_handler' );
         register_setting( 'mytheme_settings_group', 'gplus_handler' );
@@ -40,6 +44,7 @@ class Admin{
 
         add_settings_section( 'mytheme_sidebar_options', 'Sidebar Option', [ $this, 'mytheme_sidebar_options' ], 'mytheme' );
         add_settings_field( 'sidebar_name', 'Full name', [ $this, 'mytheme_sidebar_name' ], 'mytheme', 'mytheme_sidebar_options' );
+        add_settings_field( 'sidebar_description', 'Description', [ $this, 'mytheme_sidebar_description' ], 'mytheme', 'mytheme_sidebar_options' );
         add_settings_field( 'sidebar_twitter', 'Twitter handler', [ $this, 'mytheme_sidebar_twitter' ], 'mytheme', 'mytheme_sidebar_options' );
         add_settings_field( 'sidebar_facebook', 'Facebook handler', [ $this, 'mytheme_sidebar_facebook' ], 'mytheme', 'mytheme_sidebar_options' );
         add_settings_field( 'sidebar_gplus', 'Google+ handler', [ $this, 'mytheme_sidebar_gplus' ], 'mytheme', 'mytheme_sidebar_options' );
@@ -55,6 +60,12 @@ class Admin{
         echo '<input type="text" name="first_name" value="'.$first_name.'" placeholder="First Name" >
          <input type="text" name="last_name" value="'.$last_name.'" placeholder="Last Name" >';
     }
+
+    public function mytheme_sidebar_description() {
+        $user_description = esc_attr( get_option( 'user_description' ) );
+        echo '<input type="text" name="user_description" value="'.$user_description.'" placeholder="Description" >';
+    }
+
 
     public function mytheme_sidebar_twitter() {
         $twitter = esc_attr( get_option( 'twitter_handler' ) );
@@ -84,7 +95,16 @@ class Admin{
     function mytheme_sanitize_twitter_handler( $input ) {
         $output = sanitize_text_field( $input );
         return str_replace( '@', '', $output );
-    } 
+    }
+
+
+    public static function getInstance() {
+        if ( !isset( $instance ) ) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
 
 }
 

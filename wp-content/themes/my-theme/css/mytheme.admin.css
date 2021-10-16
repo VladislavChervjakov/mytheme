@@ -1,0 +1,33 @@
+.mytheme-admin-settings-container{
+    display: inline-flex;
+}
+
+.mytheme-sidebar-preview {
+    height: fit-content;
+    width: 200px;
+    background-color: #1f1f1f;
+    padding: 20px;
+    text-align: center;
+    margin-left: 120px;
+}
+
+.mytheme-sidebar {
+    display: block;
+    text-align: center;
+}
+
+.mytheme-username,
+.mytheme-description {
+    font-weight: 100;
+    color: #fff;
+}
+
+.mytheme-username {
+    font-size: 24px;
+    margin: 0 0 10px;
+}
+
+.mytheme-description {
+    font-size: 13px;
+    margin: 0 0 20px;
+}
