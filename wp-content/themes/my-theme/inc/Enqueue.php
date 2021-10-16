@@ -26,6 +26,11 @@ final class Enqueue {
  
         wp_register_style( 'mytheme_admin', get_template_directory_uri() . '/css/mytheme.admin.css', [], '1.0.0', 'all' );
         wp_enqueue_style( 'mytheme_admin' );
+
+        wp_enqueue_media();
+
+        wp_register_script( 'mytheme_admin_script', get_template_directory_uri() . '/js/mytheme.admin.js', [ 'jquery' ], '1.0.0', true );
+        wp_enqueue_script( 'mytheme_admin_script' );
     }
 
 

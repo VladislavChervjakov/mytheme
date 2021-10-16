@@ -34,6 +34,7 @@ class Admin {
 
     public function mytheme_custom_settings() {
         // register custom settings
+        register_setting( 'mytheme_settings_group', 'profile_picture' );
         register_setting( 'mytheme_settings_group', 'first_name' );
         register_setting( 'mytheme_settings_group', 'last_name' );
         register_setting( 'mytheme_settings_group', 'user_description' );
@@ -43,6 +44,8 @@ class Admin {
 
 
         add_settings_section( 'mytheme_sidebar_options', 'Sidebar Option', [ $this, 'mytheme_sidebar_options' ], 'mytheme' );
+
+        add_settings_field( 'sidebar_profile_picture', 'Profile picture', [ $this, 'mytheme_sidebar_profile_picture' ], 'mytheme', 'mytheme_sidebar_options' );
         add_settings_field( 'sidebar_name', 'Full name', [ $this, 'mytheme_sidebar_name' ], 'mytheme', 'mytheme_sidebar_options' );
         add_settings_field( 'sidebar_description', 'Description', [ $this, 'mytheme_sidebar_description' ], 'mytheme', 'mytheme_sidebar_options' );
         add_settings_field( 'sidebar_twitter', 'Twitter handler', [ $this, 'mytheme_sidebar_twitter' ], 'mytheme', 'mytheme_sidebar_options' );
@@ -52,6 +55,12 @@ class Admin {
     
     public function mytheme_sidebar_options() {
         echo 'Customize your Sidebar Information';
+    }
+
+    public function mytheme_sidebar_profile_picture() {
+        $profile_picture = esc_url( get_option( 'profile_picture' ) );
+        echo '<input type="button" class="button button-secondary" value="Upload Profile Picture" id="upload-button">
+        <input type="hidden" name="profile_picture" value="'.$profile_picture.'" id="profile-picture" >';
     }
     
     public function mytheme_sidebar_name() {
