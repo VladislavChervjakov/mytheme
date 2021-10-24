@@ -1,4 +1,4 @@
-<h1>Mytheme Theme Options</h1>
+<h1>Mytheme Sidebar Options</h1>
 <?php 
     settings_errors();
     $first_name = esc_attr( get_option( 'first_name' ) );

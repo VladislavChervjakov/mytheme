@@ -24,7 +24,8 @@ class Admin {
         add_menu_page( 'Mytheme Theme Options', 'Mytheme', 'manage_options', 'mytheme', [ $this, 'mytheme_create_page' ], 'dashicons-admin-customizer', 110 );
     
         // generate menu sub pages
-        add_submenu_page( 'mytheme', 'Mytheme Theme Options', 'General', 'manage_options', 'mytheme', [ $this, 'mytheme_create_page' ] );
+        add_submenu_page( 'mytheme', 'Mytheme Theme Options', 'Sidebar', 'manage_options', 'mytheme', [ $this, 'mytheme_create_page' ] );
+        add_submenu_page( 'mytheme', 'Mytheme Theme Options', 'Theme Options', 'manage_options', 'mytheme_theme', [ $this, 'mytheme_support_page' ] );
         add_submenu_page( 'mytheme', 'Mytheme Css Options', 'Custom CSS', 'manage_options', 'mytheme_css', [ $this, 'mytheme_settings_page' ] );
     
         // generate custom settings
@@ -34,6 +35,8 @@ class Admin {
 
     public function mytheme_custom_settings() {
         // register custom settings
+
+        // Sidebar Options
         register_setting( 'mytheme_settings_group', 'profile_picture' );
         register_setting( 'mytheme_settings_group', 'first_name' );
         register_setting( 'mytheme_settings_group', 'last_name' );
@@ -51,11 +54,43 @@ class Admin {
         add_settings_field( 'sidebar_twitter', 'Twitter handler', [ $this, 'mytheme_sidebar_twitter' ], 'mytheme', 'mytheme_sidebar_options' );
         add_settings_field( 'sidebar_facebook', 'Facebook handler', [ $this, 'mytheme_sidebar_facebook' ], 'mytheme', 'mytheme_sidebar_options' );
         add_settings_field( 'sidebar_gplus', 'Google+ handler', [ $this, 'mytheme_sidebar_gplus' ], 'mytheme', 'mytheme_sidebar_options' );
+
+
+        // Theme Support Options
+        register_setting( 'mytheme_theme_support', 'post_formats', [ $this, 'mytheme_post_formats_callback' ] );
+        
+        add_settings_section( 'mytheme_theme_options', 'Theme Options', [ $this, 'mytheme_theme_options_callback' ], 'mytheme_support_page' );
+
+        add_settings_field( 'post_formats', 'Post Formats', [ $this, 'mytheme_post_formats' ], 'mytheme_support_page', 'mytheme_theme_options' );
+        
     }
     
+    // Post Formats Callback
+    public function mytheme_post_formats_callback( $input ) {
+        return $input;
+    }
+
     public function mytheme_sidebar_options() {
         echo 'Customize your Sidebar Information';
     }
+
+    public function mytheme_theme_options_callback() {
+        echo 'Activate and Deactivate specific Theme Support Options';
+    }
+
+    public function mytheme_post_formats() {
+        $options = get_option( 'post_formats' );
+        $formats = [ 'aside', 'gallery', 'link', 'image', 'quote', 'status', 'video', 'audio', 'chat' ];
+        $output = '';
+        foreach ( $formats as $format ) {
+            $checked = @$options[$format] === '1' ? 'checked' : '';
+            $output .= '<label><input type="checkbox" id="'.$format.'" name="post_formats['.$format.']" value="1" '.$checked.'> '.$format.'</label><br>';
+        }
+
+        echo $output;
+    }
+
+    // Sidebar Options Functions
 
     public function mytheme_sidebar_profile_picture() {
         $profile_picture = esc_url( get_option( 'profile_picture' ) );
@@ -94,6 +129,10 @@ class Admin {
     public function mytheme_create_page() {
         // generation of admin page
         require_once( get_template_directory(). '/inc/templates/mytheme-admin.php' );
+    }
+
+    public function mytheme_support_page() {
+        require_once( get_template_directory() . '/inc/templates/mytheme-support.php' );
     }
     
     public function mytheme_settings_page() {
