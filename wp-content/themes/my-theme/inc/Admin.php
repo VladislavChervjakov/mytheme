@@ -57,18 +57,18 @@ class Admin {
 
 
         // Theme Support Options
-        register_setting( 'mytheme_theme_support', 'post_formats', [ $this, 'mytheme_post_formats_callback' ] );
-        
+        register_setting( 'mytheme_theme_support', 'post_formats' );
+        register_setting( 'mytheme_theme_support', 'custom_header' );
+        register_setting( 'mytheme_theme_support', 'custom_background' );
+
         add_settings_section( 'mytheme_theme_options', 'Theme Options', [ $this, 'mytheme_theme_options_callback' ], 'mytheme_support_page' );
 
         add_settings_field( 'post_formats', 'Post Formats', [ $this, 'mytheme_post_formats' ], 'mytheme_support_page', 'mytheme_theme_options' );
-        
+        add_settings_field( 'custom_header', 'Custom Header', [ $this, 'mytheme_custom_header' ], 'mytheme_support_page', 'mytheme_theme_options' );
+        add_settings_field( 'custom_background', 'Custom Background', [ $this, 'mytheme_custom_background' ], 'mytheme_support_page', 'mytheme_theme_options' );
+
     }
-    
-    // Post Formats Callback
-    public function mytheme_post_formats_callback( $input ) {
-        return $input;
-    }
+
 
     public function mytheme_sidebar_options() {
         echo 'Customize your Sidebar Information';
@@ -90,12 +90,33 @@ class Admin {
         echo $output;
     }
 
+    public function mytheme_custom_header() {
+        $options = get_option( 'custom_header' );
+        $checked = @$options === '1' ? 'checked' : '';
+        echo '<label><input type="checkbox" id="custom_header" name="custom_header" value="1" '.$checked.'>Activate the Custom Header</label>';
+
+    }
+
+    public function mytheme_custom_background() {
+        $options = get_option( 'custom_background' );
+        $checked = @$options === '1' ? 'checked' : '';
+        echo '<label><input type="checkbox" id="custom_background" name="custom_background" value="1" '.$checked.'>Activate the Custom Background</label>';
+
+    }
+
     // Sidebar Options Functions
 
     public function mytheme_sidebar_profile_picture() {
         $profile_picture = esc_url( get_option( 'profile_picture' ) );
-        echo '<input type="button" class="button button-secondary" value="Upload Profile Picture" id="upload-button">
-        <input type="hidden" name="profile_picture" value="'.$profile_picture.'" id="profile-picture" >';
+        if ( empty( $profile_picture ) ) {
+            echo '<input type="button" class="button button-secondary" value="Upload Profile Picture" id="upload-button">
+            <input type="hidden" name="profile_picture" value="" id="profile-picture" >';
+        } else {
+            echo '<input type="button" class="button button-secondary" value="Upload Profile Picture" id="upload-button">
+            <input type="hidden" name="profile_picture" value="'.$profile_picture.'" id="profile-picture" ><input type="button" 
+                class="button button-secondary" value="Remove" id="remove-picture">';
+        }
+    
     }
     
     public function mytheme_sidebar_name() {

@@ -28,4 +28,18 @@ jQuery( document ).ready( function( $ ) {
     } );
 
 
+    $( '#remove-picture' ).on( 'click', e => {
+        e.preventDefault();
+        
+        let remove = confirm( 'Delete profile picture?' );
+        if ( remove ) {
+            $( '#profile-picture' ).val( '' );
+            $( '.mytheme-general-form' ).submit();
+        }
+
+         return;
+
+    } );
+
+
 } );

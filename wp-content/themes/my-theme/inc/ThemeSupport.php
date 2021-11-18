@@ -27,6 +27,16 @@ class ThemeSupport{
         if( !empty( $options ) ) {
             add_theme_support( 'post-formats', $output );
         }
+
+        $header = get_option( 'custom_header' );
+        if ( @$header === '1' ) {
+            add_theme_support( 'custom-header' );
+        }
+
+        $background = get_option( 'custom_background' );
+        if ( @$background === '1' ) {
+            add_theme_support( 'custom-background' );
+        }
     }
 
     public static function getInstance() {

@@ -12,7 +12,7 @@
     <form method="post" action="options.php" class="mytheme-general-form">
         <?php settings_fields( 'mytheme_settings_group' ); ?>
         <?php do_settings_sections( 'mytheme' ) ?>
-        <?php submit_button(); ?>
+        <?php submit_button( 'Save Changes', 'primary', 'btnSubmit' ); ?>
     </form>
     <div class="mytheme-sidebar-preview">
         <div class="mytheme-sidebar">
