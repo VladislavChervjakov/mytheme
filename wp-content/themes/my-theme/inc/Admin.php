@@ -26,6 +26,7 @@ class Admin {
         // generate menu sub pages
         add_submenu_page( 'mytheme', 'Mytheme Theme Options', 'Sidebar', 'manage_options', 'mytheme', [ $this, 'mytheme_create_page' ] );
         add_submenu_page( 'mytheme', 'Mytheme Theme Options', 'Theme Options', 'manage_options', 'mytheme_theme', [ $this, 'mytheme_support_page' ] );
+        add_submenu_page( 'mytheme', 'Mytheme Contact Form', 'Contact Form', 'manage_options', 'mytheme_contact', [ $this, 'mytheme_contact_form_page' ] );
         add_submenu_page( 'mytheme', 'Mytheme Css Options', 'Custom CSS', 'manage_options', 'mytheme_css', [ $this, 'mytheme_settings_page' ] );
     
         // generate custom settings
@@ -67,6 +68,14 @@ class Admin {
         add_settings_field( 'custom_header', 'Custom Header', [ $this, 'mytheme_custom_header' ], 'mytheme_support_page', 'mytheme_theme_options' );
         add_settings_field( 'custom_background', 'Custom Background', [ $this, 'mytheme_custom_background' ], 'mytheme_support_page', 'mytheme_theme_options' );
 
+        // Contact Form Options
+        register_setting( 'mytheme_contact_options', 'activate_contact' );
+
+        add_settings_section( 'mytheme_contact_section', 'Contact Form', [ $this, 'mytheme_contact_section' ], 'mytheme_theme_contact' );
+
+        add_settings_field( 'activate_form', 'Activate Contact Form', [ $this, 'mytheme_activate_form' ], 'mytheme_theme_contact', 'mytheme_contact_section' );
+
+
     }
 
 
@@ -76,6 +85,10 @@ class Admin {
 
     public function mytheme_theme_options_callback() {
         echo 'Activate and Deactivate specific Theme Support Options';
+    }
+
+    public function mytheme_contact_section() {
+        echo 'Activate and Deactivate the Built-in Contact Form';
     }
 
     public function mytheme_post_formats() {
@@ -94,7 +107,12 @@ class Admin {
         $options = get_option( 'custom_header' );
         $checked = @$options === '1' ? 'checked' : '';
         echo '<label><input type="checkbox" id="custom_header" name="custom_header" value="1" '.$checked.'>Activate the Custom Header</label>';
+    }
 
+    public function mytheme_activate_form() {
+        $options = get_option( 'activate_contact' );
+        $checked = @$options === '1' ? 'checked' : '';
+        echo '<label><input type="checkbox" id="custom_header" name="activate_contact" value="1" '.$checked.'></label>';
     }
 
     public function mytheme_custom_background() {
@@ -154,6 +172,10 @@ class Admin {
 
     public function mytheme_support_page() {
         require_once( get_template_directory() . '/inc/templates/mytheme-support.php' );
+    }
+
+    public function mytheme_contact_form_page() {
+        require_once( get_template_directory() . '/inc/templates/mytheme-contact.php' );
     }
     
     public function mytheme_settings_page() {
