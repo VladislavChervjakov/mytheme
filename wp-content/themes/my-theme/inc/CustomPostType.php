@@ -14,6 +14,9 @@ class CustomPostType
         $contact = get_option( 'activate_contact' );
         if ( @$contact === '1' ) {
             add_action( 'init', [ $this, 'mytheme_contact_cpt' ] );
+
+            add_filter( 'manage_mytheme-contact_posts_columns', [ $this, 'mytheme_set_contact_columns' ] );
+            add_filter( 'manage_mytheme-contact_posts_custom_column', [ $this, 'mytheme_set_contact_column' ], 10, 2 );
         }
     }
 
@@ -38,6 +41,27 @@ class CustomPostType
         ];
 
         register_post_type( 'mytheme-contact', $args );
+    }
+
+    public function mytheme_set_contact_columns( $columns ) {
+        return [
+            'title' => 'Full Name',
+            'message' => 'Message',
+            'email' => 'Email',
+            'date' => 'Date'
+        ];
+    }
+
+    public function mytheme_set_contact_column( $column, $post_id ) {
+        switch ( $column ) {
+            case 'message' :
+                echo get_the_excerpt();
+                break;
+
+            case 'email' :
+                echo 'email address';
+                break;
+        }
     }
 
     public static function getInstance() {
